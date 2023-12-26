@@ -99,7 +99,6 @@ window.XMLHttpRequest = class extends window.XMLHttpRequest {
 let rightMouseDown = false,
 	lineOrigin, lines;
 
-
 const genName = ()=> btoa(Math.random().toString(32)),
     onUpdateFuncName = genName(),
 	disguiseFuncName = genName()
@@ -108,11 +107,7 @@ window[disguiseFuncName] = function(game){
 	const weaponType = game.playerAccount.getPrimaryWeapon().category_name.replace(" Primary Weapons", "")
 
 	for (const type of ["hats", "stamps", "grenades", "melee", "primaryWeapons", "secondaryWeapons"]){
-		const items = extern.catalog[type].filter(i=>
-			type=="primaryWeapons" ?
-			i.category_name.includes(weaponType):
-			!0
-		);
+		const items = extern.catalog[type].filter(i=>type=="primaryWeapons" ? i.category_name.includes(weaponType):!0);
 		extern.tryEquipItem(items[Math.floor(Math.random()*items.length)]);
 	}
 	vueApp.$refs.equipScreen.$refs.weapon_select.selectClass(CharClass[weaponType])
