@@ -113,11 +113,12 @@ window[disguiseFuncName] = function(game){
 	vueApp.$refs.equipScreen.$refs.weapon_select.selectClass(CharClass[weaponType])
 }
 
-window.onmousemove = ()=>{
-	try{
-		if (!vueApp?.game.on) PlayerNameInput.methods.onNameChange({target:{value: (Math.random()+1).toString(36).substring(2)}})
-	} catch{}
-}
+window.addEventListener("DOMContentLoaded", ()=>{
+	window.onmousemove = ()=>{
+		if (!vueApp?.game.on) 
+			PlayerNameInput.methods.onNameChange({target:{value: (Math.random()+1).toString(36).substring(2)}})
+	}
+})
 
 window[ onUpdateFuncName ] = function ( BABYLON, players, myPlayer ) {
 	if ( ! myPlayer ) return;
