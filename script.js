@@ -87,10 +87,10 @@ window.XMLHttpRequest = class extends window.XMLHttpRequest {
                 )
                 .replace(
                     `console.log("startGame()");`,
-                    `
-                        console.log("startGame()");
+					`
+						console.log("startGame()");
 						window['${disguiseFuncName}'](${variables.game});
-                    `,
+					`,
                 )
         }
 
