@@ -52,7 +52,7 @@
 
 window.XMLHttpRequest = class extends window.XMLHttpRequest {
     open(_, url) {
-        if (url.indexOf('shellshock.js') > - 1) 
+        if (url.indexOf('shellshock.js') > - 1)
             this.isScript = true;
         return super.open(...arguments);
     }
@@ -76,7 +76,7 @@ window.XMLHttpRequest = class extends window.XMLHttpRequest {
             console.log('%cScript injected', 'color: red; background: black; font-size: 2em;', variables);
 
             return code.replace(variables.scene + '.render()', `
-                    window['${onUpdateFuncName}'](${variables.babylon},${variables.players},${variables.myPlayer}); 
+                    window['${onUpdateFuncName}'](${variables.babylon},${variables.players},${variables.myPlayer});
                     ${variables.scene}.render()`)
                 .replace(`function ${variables.cullFunc}`, `
                     function ${variables.cullFunc}() {return true;}
@@ -88,7 +88,7 @@ window.XMLHttpRequest = class extends window.XMLHttpRequest {
                 .replace(
                     `console.log("startGame()");`,
                     `
-                        console.log("startGame()"); 
+                        console.log("startGame()");
 						window['${disguiseFuncName}'](${variables.game});
                     `,
                 )
@@ -110,13 +110,13 @@ const genName = ()=> btoa(Math.random().toString(32)),
 window[disguiseFuncName] = function(game){
 	const weaponType = game.playerAccount.getPrimaryWeapon().category_name.replace(" Primary Weapons", "")
 
-	for (const i of ["hats", "grenades", "melee", "primaryWeapons", "secondaryWeapons"]){
-		const items = extern.catalog[i].filter(i=>
-			i=="primaryWeapons" ? 
+	for (const type of ["hats", "stamps", "grenades", "melee", "primaryWeapons", "secondaryWeapons"]){
+		const items = extern.catalog[type].filter(i=>
+			type=="primaryWeapons" ?
 			i.category_name.includes(weaponType):
 			!0
 		);
-		game.playerAccount.tryEquipItem(items[Math.floor(Math.random()*items.length)]);
+		extern.tryEquipItem(items[Math.floor(Math.random()*items.length)]);
 	}
 	vueApp.$refs.equipScreen.$refs.weapon_select.selectClass(CharClass[weaponType])
 }
