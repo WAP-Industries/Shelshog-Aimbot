@@ -115,7 +115,7 @@ window[disguiseFuncName] = function(game){
 
 window.onmousemove = ()=>{
 	try{
-		if (!vueApp?.game.on) PlayerNameInput.methods.onNameChange({target: {value: (Math.random()+1).toString(36).substring(2)}})
+		if (!vueApp?.game.on) PlayerNameInput.methods.onNameChange({target:{value: (Math.random()+1).toString(36).substring(2)}})
 	} catch{}
 }
 
