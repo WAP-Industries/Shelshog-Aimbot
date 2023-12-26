@@ -89,10 +89,7 @@ window.XMLHttpRequest = class extends window.XMLHttpRequest {
                     `console.log("startGame()");`,
                     `
                         console.log("startGame()"); 
-                        window['${disguiseFunc}'](${variables.game});
-						vueApp.$refs.equipScreen.$refs.weapon_select.selectClass(
-							CharClass[${variables.game}.playerAccount.getPrimaryWeapon().category_name.replace(" Primary Weapons", "")]
-						);
+						window['${disguiseFuncName}'](${variables.game});
                     `,
                 )
         }
@@ -103,28 +100,31 @@ window.XMLHttpRequest = class extends window.XMLHttpRequest {
 
 
 let rightMouseDown = false,
-lineOrigin, lines;
+	lineOrigin, lines;
 
 
 const genName = ()=> btoa(Math.random().toString(32)),
     onUpdateFuncName = genName(),
-    disguiseFunc = genName()
+	disguiseFuncName = genName()
 
-window[disguiseFunc] = function(game){
-    for (const i of ["hats", "grenades", "melee", "primaryWeapons", "secondaryWeapons"]){
-        const items = extern.catalog[i].filter(i=>
-            i=="primaryWeapons" ? 
-            i.category_name.includes(game.playerAccount.getPrimaryWeapon().category_name.replace(" Primary Weapons", "")):
-            !0
-        )
-        extern.tryEquipItem(items[Math.floor(Math.random()*items.length)])
-    }
+window[disguiseFuncName] = function(game){
+	const weaponType = game.playerAccount.getPrimaryWeapon().category_name.replace(" Primary Weapons", "")
+
+	for (const i of ["hats", "grenades", "melee", "primaryWeapons", "secondaryWeapons"]){
+		const items = extern.catalog[i].filter(i=>
+			i=="primaryWeapons" ? 
+			i.category_name.includes(weaponType):
+			!0
+		);
+		game.playerAccount.tryEquipItem(items[Math.floor(Math.random()*items.length)]);
+	}
+	vueApp.$refs.equipScreen.$refs.weapon_select.selectClass(CharClass[weaponType])
 }
 
 window.onmousemove = ()=>{
 	try{
 		if (!vueApp?.game.on) PlayerNameInput.methods.onNameChange({target: {value: (Math.random()+1).toString(36).substring(2)}})
-	}catch{}
+	} catch{}
 }
 
 window[ onUpdateFuncName ] = function ( BABYLON, players, myPlayer ) {
