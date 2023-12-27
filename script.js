@@ -134,49 +134,49 @@ window[onUpdateFuncName] = function(BABYLON, players, myPlayer) {
     lineOrigin.x += Math.sin(yaw);
     lineOrigin.z += Math.cos(yaw);
     lineOrigin.y += Math.sin(-myPlayer.pitch);
-
-	for (let i=0; i<linesArray.length; i ++ )
-		linesArray[ i ].playerExists = false;
-
-	for ( let i = 0; i < players.length; i ++ ) {
-		const player = players[ i ];
-
-		if ( ! player || player === myPlayer ) continue;
-
-		if ( player.sphere === undefined ) {
-			console.log( 'Adding sphere...' );
-
-			const material = new BABYLON.StandardMaterial( 'myMaterial', player.actor.scene );
-			material.emissiveColor = material.diffuseColor = new BABYLON.Color3( 1, 0, 0 );
-			material.wireframe = true;
-
-			const sphere = BABYLON.MeshBuilder.CreateBox( 'mySphere', { width: 0.5, height: 0.75, depth: 0.5 }, player.actor.scene );
-			sphere.material = material;
-			sphere.position.y = 0.3;
-
-			sphere.parent = player.actor.mesh;
-
-			player.sphere = sphere;
-		}
-
-		if ( player.lines === undefined ) {
-			const options = {
-				points: [ lineOrigin, player.actor.mesh.position ],
-				updatable: true
-			};
-
-			const lines = options.instance = BABYLON.MeshBuilder.CreateLines( 'lines', options, player.actor.scene );
-			lines.color = new BABYLON.Color3( 1, 0, 0 );
-			lines.alwaysSelectAsActiveMesh = true;
-			lines.renderingGroupId = 1;
-
-			player.lines = lines;
-			player.lineOptions = options;
-
-			linesArray.push( lines );
-
-			console.log( '%cAdding line...', 'color: green; background: black; font-size: 2em;' );
-		}
+    
+    for (let i=0; i<linesArray.length; i ++ )
+        linesArray[ i ].playerExists = false;
+    
+    for ( let i = 0; i < players.length; i ++ ) {
+        const player = players[ i ];
+        
+        if ( ! player || player === myPlayer ) continue;
+        
+        if ( player.sphere === undefined ) {
+            console.log( 'Adding sphere...' );
+            
+            const material = new BABYLON.StandardMaterial( 'myMaterial', player.actor.scene );
+            material.emissiveColor = material.diffuseColor = new BABYLON.Color3( 1, 0, 0 );
+            material.wireframe = true;
+            
+            const sphere = BABYLON.MeshBuilder.CreateBox( 'mySphere', { width: 0.5, height: 0.75, depth: 0.5 }, player.actor.scene );
+            sphere.material = material;
+            sphere.position.y = 0.3;
+            
+            sphere.parent = player.actor.mesh;
+            
+            player.sphere = sphere;
+        }
+        
+        if ( player.lines === undefined ) {
+            const options = {
+                points: [ lineOrigin, player.actor.mesh.position ],
+                updatable: true
+            };
+            
+            const lines = options.instance = BABYLON.MeshBuilder.CreateLines( 'lines', options, player.actor.scene );
+            lines.color = new BABYLON.Color3( 1, 0, 0 );
+            lines.alwaysSelectAsActiveMesh = true;
+            lines.renderingGroupId = 1;
+            
+            player.lines = lines;
+            player.lineOptions = options;
+            
+            linesArray.push( lines );
+            
+            console.log( '%cAdding line...', 'color: green; background: black; font-size: 2em;' );
+        }
 
 		player.lines.playerExists = true;
 		player.lines = BABYLON.MeshBuilder.CreateLines( 'lines', player.lineOptions );
