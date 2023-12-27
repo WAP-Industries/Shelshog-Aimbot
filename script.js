@@ -135,13 +135,13 @@ window[onUpdateFuncName] = function(BABYLON, players, myPlayer) {
     lineOrigin.z += Math.cos(yaw);
     lineOrigin.y += Math.sin(-myPlayer.pitch);
     
-    for (let i=0; i<linesArray.length; i ++ )
+    for (let i=0;i<linesArray.length;i++ )
         linesArray[ i ].playerExists = false;
     
-    for ( let i = 0; i < players.length; i ++ ) {
+    for (let i=0; i<players.length; i++) {
         const player = players[ i ];
         
-        if ( ! player || player === myPlayer ) continue;
+        if (!player || player===myPlayer) continue;
         
         if ( player.sphere === undefined ) {
             console.log( 'Adding sphere...' );
@@ -177,24 +177,23 @@ window[onUpdateFuncName] = function(BABYLON, players, myPlayer) {
             
             console.log( '%cAdding line...', 'color: green; background: black; font-size: 2em;' );
         }
-
-		player.lines.playerExists = true;
-		player.lines = BABYLON.MeshBuilder.CreateLines( 'lines', player.lineOptions );
-
-		player.sphere.renderingGroupId = 1
-		player.sphere.visibility = myPlayer !== player && ( myPlayer.team === 0 || myPlayer.team !== player.team );
-
-		player.lines.visibility = player.playing && player.sphere.visibility;
-
-	}
-
-	for ( let i = 0; i < linesArray.length; i ++ ) {
-		if ( ! linesArray[ i ].playerExists ) {
-			console.log( '%cRemoving line...', 'color: red; background: black; font-size: 2em;' );
-			linesArray[ i ].dispose();
-			linesArray.splice( i, 1 );
-		}
-	}
+        
+        player.lines.playerExists = true;
+        lines = BABYLON.MeshBuilder.CreateLines( 'lines', player.lineOptions );
+        
+        player.sphere.renderingGroupId = 1
+        player.sphere.visibility = myPlayer !== player && ( myPlayer.team === 0 || myPlayer.team !== player.team );
+        
+        player.lines.visibility = player.playing && player.sphere.visibility;
+    }
+    
+    for ( let i = 0; i < linesArray.length; i ++ ) {
+        if ( ! linesArray[ i ].playerExists ) {
+            console.log( '%cRemoving line...', 'color: red; background: black; font-size: 2em;' );
+            linesArray[ i ].dispose();
+            linesArray.splice( i, 1 );
+        }
+    }
 
 	if (rightMouseDown && myPlayer.playing ) {
 		let minDistance = Infinity;
