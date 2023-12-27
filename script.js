@@ -68,7 +68,6 @@ window.XMLHttpRequest = class extends window.XMLHttpRequest {
                 scene: /createMapCells\(([^,]+),/.exec(code)?.[1],
                 cullFunc: /=([a-zA-Z_$]+)\(this\.mesh,\.[0-9]+\)/.exec(code)?.[1],
                 game: /([^,]+).playerAccount=/.exec(code)?.[1],
-                spriteManager: /([^,]+)=new [^,]+.SpriteManager\(/.exec(code)?.[1],
             }
 
             if (Object.values(variables).some(i=>!i))
@@ -77,7 +76,7 @@ window.XMLHttpRequest = class extends window.XMLHttpRequest {
             console.log('%cScript injected', 'color: red; background: black; font-size: 2em;', variables);
 
             return code.replace(variables.scene + '.render()', `
-                    window['${onUpdateFuncName}'](${variables.babylon},${variables.players},${variables.myPlayer},${variables.spriteManager});
+                    window['${onUpdateFuncName}'](${variables.babylon},${variables.players},${variables.myPlayer});
                     ${variables.scene}.render()`)
                 .replace(`function ${variables.cullFunc}`, `
                     function ${variables.cullFunc}() {return true;}
@@ -120,9 +119,7 @@ window.addEventListener("DOMContentLoaded", ()=>{
     }
 })
 
-window[onUpdateFuncName] = function(BABYLON, players, myPlayer, spriteManager){
-    spriteManager.renderingGroupId = 1
-    
+window[onUpdateFuncName] = function(BABYLON, players, myPlayer){
     if (!myPlayer) return;
     
     if (!lineOrigin){
