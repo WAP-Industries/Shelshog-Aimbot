@@ -68,7 +68,7 @@ window.XMLHttpRequest = class extends window.XMLHttpRequest {
                 scene: /createMapCells\(([^,]+),/.exec(code)?.[1],
                 cullFunc: /=([a-zA-Z_$]+)\(this\.mesh,\.[0-9]+\)/.exec(code)?.[1],
                 game: /([^,]+).playerAccount=/.exec(code)?.[1],
-                spriteManager: /([^,]+)=new [^,]+.SpriteManager\(/.exec(code)?.[1]
+                spriteManager: /([^,]+)=new [^,]+.SpriteManager\(/.exec(code)?.[1],
             }
 
             if (Object.values(variables).some(i=>!i))
