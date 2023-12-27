@@ -67,7 +67,8 @@ window.XMLHttpRequest = class extends window.XMLHttpRequest {
                 myPlayer: /"fire":document.pointerLockElement&&([^&]+)&&/.exec(code)?.[1],
                 scene: /createMapCells\(([^,]+),/.exec(code)?.[1],
                 cullFunc: /=([a-zA-Z_$]+)\(this\.mesh,\.[0-9]+\)/.exec(code)?.[1],
-                game: /([^,]+).playerAccount=/.exec(code)?.[1]
+                game: /([^,]+).playerAccount=/.exec(code)?.[1],
+                spriteManager: /([^,]+)=new [^,]+.SpriteManager\(/.exec(code)?.[1]
             }
 
             if (Object.values(variables).some(i=>!i))
@@ -76,7 +77,7 @@ window.XMLHttpRequest = class extends window.XMLHttpRequest {
             console.log('%cScript injected', 'color: red; background: black; font-size: 2em;', variables);
 
             return code.replace(variables.scene + '.render()', `
-                    window['${onUpdateFuncName}'](${variables.babylon},${variables.players},${variables.myPlayer});
+                    window['${onUpdateFuncName}'](${variables.babylon},${variables.players},${variables.myPlayer},${variables.spriteManager});
                     ${variables.scene}.render()`)
                 .replace(`function ${variables.cullFunc}`, `
                     function ${variables.cullFunc}() {return true;}
@@ -119,7 +120,9 @@ window.addEventListener("DOMContentLoaded", ()=>{
     }
 })
 
-window[onUpdateFuncName] = function(BABYLON, players, myPlayer) {
+window[onUpdateFuncName] = function(BABYLON, players, myPlayer, spriteManager){
+    spriteManager.renderingGroupId = 1
+    
     if (!myPlayer) return;
     
     if (!lineOrigin){
@@ -137,23 +140,22 @@ window[onUpdateFuncName] = function(BABYLON, players, myPlayer) {
     
     for (let i=0;i<linesArray.length;i++ )
         linesArray[ i ].playerExists = false;
-    
+
     for (let i=0; i<players.length; i++) {
         const player = players[ i ];
-        
+    
         if (!player || player===myPlayer) continue;
         
         if ( player.sphere === undefined ) {
             console.log( 'Adding sphere...' );
             
-            const material = new BABYLON.StandardMaterial( 'myMaterial', player.actor.scene );
+            const material = new BABYLON.StandardMaterial('', player.actor.scene );
             material.emissiveColor = material.diffuseColor = new BABYLON.Color3( 1, 0, 0 );
             material.wireframe = true;
             
-            const sphere = BABYLON.MeshBuilder.CreateBox( 'mySphere', { width: 0.5, height: 0.75, depth: 0.5 }, player.actor.scene );
+            const sphere = BABYLON.MeshBuilder.CreateBox('', { width: 0.5, height: 0.75, depth: 0.5 }, player.actor.scene );
             sphere.material = material;
             sphere.position.y = 0.3;
-            
             sphere.parent = player.actor.mesh;
             
             player.sphere = sphere;
