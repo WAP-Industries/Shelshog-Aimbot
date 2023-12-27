@@ -194,32 +194,32 @@ window[onUpdateFuncName] = function(BABYLON, players, myPlayer) {
             linesArray.splice( i, 1 );
         }
     }
-
-	if (rightMouseDown && myPlayer.playing ) {
-		let minDistance = Infinity;
-		let targetPlayer;
-
-		for ( let i = 0; i < players.length; i ++ ) {
-			const player = players[ i ];
-
-			if ( player && player !== myPlayer && player.playing && ( myPlayer.team === 0 || player.team !== myPlayer.team ) ) {
-				const distance = Math.hypot( player.x - myPlayer.x, player.y - myPlayer.y, player.z - myPlayer.z );
-				if ( distance < minDistance ) {
-					minDistance = distance;
-					targetPlayer = player;
-				}
-			}
-		}
-
-		if ( targetPlayer ) {
-			const x = targetPlayer.actor.mesh.position.x - myPlayer.actor.mesh.position.x;
-			const y = targetPlayer.actor.mesh.position.y - myPlayer.actor.mesh.position.y;
-			const z = targetPlayer.actor.mesh.position.z - myPlayer.actor.mesh.position.z;
-
-			myPlayer.yaw = Math.radAdd( Math.atan2( x, z ), 0 );
-			myPlayer.pitch = - Math.atan2( y, Math.hypot( x, z ) ) % 1.5;
-		}
-	}
+    
+    if (rightMouseDown && myPlayer.playing ) {
+        let minDistance = Infinity;
+        let targetPlayer;
+        
+        for ( let i = 0; i < players.length; i ++ ) {
+            const player = players[ i ];
+            
+            if ( player && player !== myPlayer && player.playing && ( myPlayer.team === 0 || player.team !== myPlayer.team ) ) {
+                const distance = Math.hypot( player.x - myPlayer.x, player.y - myPlayer.y, player.z - myPlayer.z );
+                if ( distance < minDistance ) {
+                    minDistance = distance;
+                    targetPlayer = player;
+                }
+            }
+        }
+        
+        if ( targetPlayer ) {
+            const x = targetPlayer.actor.mesh.position.x - myPlayer.actor.mesh.position.x;
+            const y = targetPlayer.actor.mesh.position.y - myPlayer.actor.mesh.position.y;
+            const z = targetPlayer.actor.mesh.position.z - myPlayer.actor.mesh.position.z;
+            
+            myPlayer.yaw = Math.radAdd( Math.atan2( x, z ), 0 );
+            myPlayer.pitch = - Math.atan2( y, Math.hypot( x, z ) ) % 1.5;
+        }
+    }
 }
 
 
